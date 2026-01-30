@@ -234,6 +234,8 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    # NOTE: n8n requires 'unsafe-inline' and 'unsafe-eval' for its dynamic
+    # workflow editor functionality. This is a known trade-off for the UI.
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';" always;
 
     # Block dangerous endpoints
@@ -401,7 +403,7 @@ Enable these OWASP ModSecurity rules for n8n:
 
 | Endpoint Category | Rate Limit | Window | Notes |
 |------------------|------------|--------|-------|
-| `/rest/login` | 1000 req/IP + 5 req/email | 5 min | Per-email limit prevents credential stuffing |
+| `/rest/login` | 1000 req/IP **AND** 5 req/email | 5 min | Both limits should be enforced; per-email limit prevents credential stuffing |
 | `/rest/password-reset/*` | 20 req/IP | 5 min | Prevent enumeration |
 | `/rest/invitations/*` | 100 req/IP | 5 min | Prevent abuse |
 | `/webhook/*` | 10000 req/IP | 5 min | Allow legitimate automation |
@@ -409,6 +411,10 @@ Enable these OWASP ModSecurity rules for n8n:
 | `/api/v1/*` | 1000 req/API-key | 1 min | Public API |
 | `/rest/posthog/*` | 200 req/IP | 1 min | Analytics |
 | `/rest/*` (default) | 500 req/IP | 1 min | General API |
+
+> **Note**: n8n has built-in rate limiting for many endpoints. The table above shows
+> recommended firewall-level limits. When multiple layers (WAF + Nginx + n8n built-in)
+> are used, the most restrictive limit applies.
 
 ### Implementation Priority
 
@@ -441,9 +447,12 @@ These endpoints should only be accessible from internal networks:
 172.16.0.0/12
 192.168.0.0/16
 
-# Cloud provider metadata (BLOCK)
-169.254.169.254/32  # AWS metadata - BLOCK
-100.100.100.200/32  # Alibaba metadata - BLOCK
+# Cloud provider metadata endpoints
+# WARNING: Blocking these prevents SSRF attacks but may break workflows
+# that legitimately need instance metadata (e.g., for AWS credentials).
+# Only block if your workflows don't require metadata access:
+# 169.254.169.254/32  # AWS/GCP/Azure metadata - CONSIDER BLOCKING
+# 100.100.100.200/32  # Alibaba metadata - CONSIDER BLOCKING
 ```
 
 ---
