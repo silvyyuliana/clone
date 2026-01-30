@@ -1,0 +1,478 @@
+{
+  "$schema": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html",
+  "description": "AWS WAF Rules for n8n Production Deployment",
+  "generatedAt": "2026-01-30",
+  "webAcl": {
+    "Name": "n8n-production-waf",
+    "Scope": "REGIONAL",
+    "DefaultAction": {
+      "Allow": {}
+    },
+    "Description": "WAF rules for protecting n8n API endpoints",
+    "Rules": [
+      {
+        "Name": "BlockE2EEndpoints",
+        "Priority": 1,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 403,
+              "ResponseHeaders": [
+                {
+                  "Name": "Content-Type",
+                  "Value": "application/json"
+                }
+              ],
+              "CustomResponseBodyKey": "BlockedEndpoint"
+            }
+          }
+        },
+        "Statement": {
+          "RegexMatchStatement": {
+            "FieldToMatch": {
+              "UriPath": {}
+            },
+            "RegexString": "^/rest/e2e.*",
+            "TextTransformations": [
+              {
+                "Type": "LOWERCASE",
+                "Priority": 0
+              }
+            ]
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "BlockE2EEndpoints",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "BlockDebugEndpoints",
+        "Priority": 2,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 403
+            }
+          }
+        },
+        "Statement": {
+          "ByteMatchStatement": {
+            "FieldToMatch": {
+              "UriPath": {}
+            },
+            "PositionalConstraint": "STARTS_WITH",
+            "SearchString": "/rest/debug",
+            "TextTransformations": [
+              {
+                "Type": "LOWERCASE",
+                "Priority": 0
+              }
+            ]
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "BlockDebugEndpoints",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "BlockTestWebhooks",
+        "Priority": 3,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 403
+            }
+          }
+        },
+        "Statement": {
+          "OrStatement": {
+            "Statements": [
+              {
+                "ByteMatchStatement": {
+                  "FieldToMatch": {
+                    "UriPath": {}
+                  },
+                  "PositionalConstraint": "STARTS_WITH",
+                  "SearchString": "/webhook-test",
+                  "TextTransformations": [
+                    {
+                      "Type": "LOWERCASE",
+                      "Priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "ByteMatchStatement": {
+                  "FieldToMatch": {
+                    "UriPath": {}
+                  },
+                  "PositionalConstraint": "STARTS_WITH",
+                  "SearchString": "/form-test",
+                  "TextTransformations": [
+                    {
+                      "Type": "LOWERCASE",
+                      "Priority": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "ByteMatchStatement": {
+                  "FieldToMatch": {
+                    "UriPath": {}
+                  },
+                  "PositionalConstraint": "STARTS_WITH",
+                  "SearchString": "/mcp-test",
+                  "TextTransformations": [
+                    {
+                      "Type": "LOWERCASE",
+                      "Priority": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "BlockTestWebhooks",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "RateLimitLogin",
+        "Priority": 10,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 429,
+              "ResponseHeaders": [
+                {
+                  "Name": "Retry-After",
+                  "Value": "300"
+                }
+              ]
+            }
+          }
+        },
+        "Statement": {
+          "RateBasedStatement": {
+            "AggregateKeyType": "IP",
+            "Limit": 1000,
+            "ScopeDownStatement": {
+              "AndStatement": {
+                "Statements": [
+                  {
+                    "ByteMatchStatement": {
+                      "FieldToMatch": {
+                        "UriPath": {}
+                      },
+                      "PositionalConstraint": "EXACTLY",
+                      "SearchString": "/rest/login",
+                      "TextTransformations": [
+                        {
+                          "Type": "LOWERCASE",
+                          "Priority": 0
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "ByteMatchStatement": {
+                      "FieldToMatch": {
+                        "Method": {}
+                      },
+                      "PositionalConstraint": "EXACTLY",
+                      "SearchString": "POST",
+                      "TextTransformations": [
+                        {
+                          "Type": "UPPERCASE",
+                          "Priority": 0
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "RateLimitLogin",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "RateLimitPasswordReset",
+        "Priority": 11,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 429
+            }
+          }
+        },
+        "Statement": {
+          "RateBasedStatement": {
+            "AggregateKeyType": "IP",
+            "Limit": 100,
+            "ScopeDownStatement": {
+              "ByteMatchStatement": {
+                "FieldToMatch": {
+                  "UriPath": {}
+                },
+                "PositionalConstraint": "CONTAINS",
+                "SearchString": "password",
+                "TextTransformations": [
+                  {
+                    "Type": "LOWERCASE",
+                    "Priority": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "RateLimitPasswordReset",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "RateLimitWebhooks",
+        "Priority": 20,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 429
+            }
+          }
+        },
+        "Statement": {
+          "RateBasedStatement": {
+            "AggregateKeyType": "IP",
+            "Limit": 10000,
+            "ScopeDownStatement": {
+              "ByteMatchStatement": {
+                "FieldToMatch": {
+                  "UriPath": {}
+                },
+                "PositionalConstraint": "STARTS_WITH",
+                "SearchString": "/webhook/",
+                "TextTransformations": [
+                  {
+                    "Type": "LOWERCASE",
+                    "Priority": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "RateLimitWebhooks",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "RateLimitAPI",
+        "Priority": 30,
+        "Action": {
+          "Block": {
+            "CustomResponse": {
+              "ResponseCode": 429
+            }
+          }
+        },
+        "Statement": {
+          "RateBasedStatement": {
+            "AggregateKeyType": "IP",
+            "Limit": 5000,
+            "ScopeDownStatement": {
+              "OrStatement": {
+                "Statements": [
+                  {
+                    "ByteMatchStatement": {
+                      "FieldToMatch": {
+                        "UriPath": {}
+                      },
+                      "PositionalConstraint": "STARTS_WITH",
+                      "SearchString": "/rest/",
+                      "TextTransformations": [
+                        {
+                          "Type": "LOWERCASE",
+                          "Priority": 0
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "ByteMatchStatement": {
+                      "FieldToMatch": {
+                        "UriPath": {}
+                      },
+                      "PositionalConstraint": "STARTS_WITH",
+                      "SearchString": "/api/",
+                      "TextTransformations": [
+                        {
+                          "Type": "LOWERCASE",
+                          "Priority": 0
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "RateLimitAPI",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "AWSManagedRulesCommonRuleSet",
+        "Priority": 100,
+        "OverrideAction": {
+          "None": {}
+        },
+        "Statement": {
+          "ManagedRuleGroupStatement": {
+            "VendorName": "AWS",
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "ExcludedRules": []
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "AWSManagedRulesCommonRuleSet",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+        "Priority": 101,
+        "OverrideAction": {
+          "None": {}
+        },
+        "Statement": {
+          "ManagedRuleGroupStatement": {
+            "VendorName": "AWS",
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet"
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "AWSManagedRulesKnownBadInputsRuleSet",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "AWSManagedRulesSQLiRuleSet",
+        "Priority": 102,
+        "OverrideAction": {
+          "None": {}
+        },
+        "Statement": {
+          "ManagedRuleGroupStatement": {
+            "VendorName": "AWS",
+            "Name": "AWSManagedRulesSQLiRuleSet"
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "AWSManagedRulesSQLiRuleSet",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "AWSManagedRulesLinuxRuleSet",
+        "Priority": 103,
+        "OverrideAction": {
+          "None": {}
+        },
+        "Statement": {
+          "ManagedRuleGroupStatement": {
+            "VendorName": "AWS",
+            "Name": "AWSManagedRulesLinuxRuleSet"
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "AWSManagedRulesLinuxRuleSet",
+          "SampledRequestsEnabled": true
+        }
+      },
+      {
+        "Name": "AWSManagedRulesAmazonIpReputationList",
+        "Priority": 104,
+        "OverrideAction": {
+          "None": {}
+        },
+        "Statement": {
+          "ManagedRuleGroupStatement": {
+            "VendorName": "AWS",
+            "Name": "AWSManagedRulesAmazonIpReputationList"
+          }
+        },
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "AWSManagedRulesAmazonIpReputationList",
+          "SampledRequestsEnabled": true
+        }
+      }
+    ],
+    "VisibilityConfig": {
+      "CloudWatchMetricsEnabled": true,
+      "MetricName": "n8nProductionWAF",
+      "SampledRequestsEnabled": true
+    },
+    "CustomResponseBodies": {
+      "BlockedEndpoint": {
+        "ContentType": "APPLICATION_JSON",
+        "Content": "{\"error\": \"This endpoint is disabled in production\", \"code\": \"ENDPOINT_DISABLED\"}"
+      }
+    }
+  },
+  "cloudFormationTemplate": {
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS WAF Web ACL for n8n production deployment",
+    "Resources": {
+      "N8nWAFWebACL": {
+        "Type": "AWS::WAFv2::WebACL",
+        "Properties": {
+          "Name": "n8n-production-waf",
+          "Scope": "REGIONAL",
+          "DefaultAction": {
+            "Allow": {}
+          },
+          "Description": "WAF rules for protecting n8n API endpoints",
+          "Rules": "<<See rules array above>>",
+          "VisibilityConfig": {
+            "CloudWatchMetricsEnabled": true,
+            "MetricName": "n8nProductionWAF",
+            "SampledRequestsEnabled": true
+          }
+        }
+      }
+    }
+  },
+  "notes": [
+    "This configuration blocks E2E testing endpoints, debug endpoints, and test webhook endpoints",
+    "Rate limiting is applied to login, password reset, webhooks, and general API endpoints",
+    "AWS Managed Rules are included for common attack protection",
+    "Customize IP-based rules according to your network requirements",
+    "Review and test rules in count mode before blocking"
+  ]
+}

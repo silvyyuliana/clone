@@ -1,0 +1,886 @@
+{
+  "scanDate": "2026-01-30T15:10:49.006Z",
+  "summary": {
+    "totalRestEndpoints": 282,
+    "webhookEndpoints": 8,
+    "systemEndpoints": 3,
+    "publicApiEndpoints": 27,
+    "byRisk": {
+      "critical": 5,
+      "high": 36,
+      "medium": 241,
+      "low": 0
+    },
+    "unauthenticatedEndpoints": 38,
+    "rateLimitedEndpoints": 25
+  },
+  "critical": [
+    {
+      "path": "/debug/multi-main-setup",
+      "method": "GET",
+      "controller": "debug.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting",
+        "SENSITIVE AUTH ENDPOINT - Monitor for brute force"
+      ]
+    },
+    {
+      "path": "/me/password",
+      "method": "PATCH",
+      "controller": "me.controller",
+      "requiresAuth": true,
+      "hasRateLimit": true,
+      "notes": [
+        "SENSITIVE AUTH ENDPOINT - Monitor for brute force",
+        "Consider adding rate limiting"
+      ]
+    },
+    {
+      "path": "/owner/setup",
+      "method": "POST",
+      "controller": "owner.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting",
+        "SENSITIVE AUTH ENDPOINT - Monitor for brute force"
+      ]
+    },
+    {
+      "path": "/users/:id/password-reset-link",
+      "method": "GET",
+      "controller": "users.controller",
+      "requiresAuth": true,
+      "hasRateLimit": false,
+      "notes": [
+        "SENSITIVE AUTH ENDPOINT - Monitor for brute force",
+        "Consider adding rate limiting"
+      ]
+    },
+    {
+      "path": "/sso/oidc/login",
+      "method": "GET",
+      "controller": "oidc.controller.ee",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting",
+        "SENSITIVE AUTH ENDPOINT - Monitor for brute force"
+      ]
+    }
+  ],
+  "high": [
+    {
+      "path": "/binary-data/signed",
+      "method": "GET",
+      "controller": "binary-data.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/reset",
+      "method": "POST",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/push",
+      "method": "POST",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/feature",
+      "method": "PATCH",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/quota",
+      "method": "PATCH",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/queue-mode",
+      "method": "PATCH",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/env-feature-flags",
+      "method": "GET",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/e2e/env-feature-flags",
+      "method": "PATCH",
+      "controller": "e2e.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/invitations/accept",
+      "method": "POST",
+      "controller": "invitation.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/invitations/:id/accept",
+      "method": "POST",
+      "controller": "invitation.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/capture/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/decide/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/s/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/e/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/engage/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/batch/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/flags/",
+      "method": "POST",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/static/array.js",
+      "method": "GET",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/static/lazy-recorder.js",
+      "method": "GET",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/posthog/array/:apiKey/config.js",
+      "method": "GET",
+      "controller": "posthog.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/telemetry/proxy/:version/track",
+      "method": "POST",
+      "controller": "telemetry.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/telemetry/proxy/:version/identify",
+      "method": "POST",
+      "controller": "telemetry.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/telemetry/proxy/:version/page",
+      "method": "POST",
+      "controller": "telemetry.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/telemetry/rudderstack/sourceConfig",
+      "method": "GET",
+      "controller": "telemetry.controller",
+      "requiresAuth": false,
+      "hasRateLimit": true,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/credentials/:id/revoke",
+      "method": "OPTIONS",
+      "controller": "dynamic-credentials.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/credentials/:id/revoke",
+      "method": "DELETE",
+      "controller": "dynamic-credentials.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting",
+        "DESTRUCTIVE ACTION - Log all requests"
+      ]
+    },
+    {
+      "path": "/credentials/:id/authorize",
+      "method": "OPTIONS",
+      "controller": "dynamic-credentials.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/credentials/:id/authorize",
+      "method": "POST",
+      "controller": "dynamic-credentials.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/workflows/:workflowId/execution-status",
+      "method": "OPTIONS",
+      "controller": "workflow-status.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/workflows/:workflowId/execution-status",
+      "method": "GET",
+      "controller": "workflow-status.controller",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/sso/oidc/callback",
+      "method": "GET",
+      "controller": "oidc.controller.ee",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/sso/saml/metadata",
+      "method": "GET",
+      "controller": "saml.controller.ee",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/sso/saml/acs",
+      "method": "GET",
+      "controller": "saml.controller.ee",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/sso/saml/acs",
+      "method": "POST",
+      "controller": "saml.controller.ee",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/sso/saml/initsso",
+      "method": "GET",
+      "controller": "saml.controller.ee",
+      "requiresAuth": false,
+      "hasRateLimit": false,
+      "notes": [
+        "UNAUTHENTICATED - Apply strict rate limiting"
+      ]
+    },
+    {
+      "path": "/webhooks/find",
+      "method": "POST",
+      "controller": "webhooks.controller",
+      "requiresAuth": true,
+      "hasRateLimit": false,
+      "notes": [
+        "WEBHOOK - Externally accessible, validate payload",
+        "Consider adding rate limiting"
+      ]
+    }
+  ],
+  "webhooks": [
+    {
+      "type": "webhook",
+      "path": "/webhook/*",
+      "method": "ALL",
+      "description": "Live webhook handler",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "External access required",
+        "Validate webhook signatures",
+        "Rate limit per IP"
+      ]
+    },
+    {
+      "type": "webhook",
+      "path": "/webhook-test/*",
+      "method": "ALL",
+      "description": "Test webhook handler",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "Should be disabled in production or IP-restricted"
+      ]
+    },
+    {
+      "type": "webhook",
+      "path": "/webhook-waiting/*",
+      "method": "ALL",
+      "description": "Waiting webhook handler",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "External access required",
+        "Rate limit per IP"
+      ]
+    },
+    {
+      "type": "form",
+      "path": "/form/*",
+      "method": "ALL",
+      "description": "Live form handler",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "External access required",
+        "CSRF protection needed"
+      ]
+    },
+    {
+      "type": "form",
+      "path": "/form-test/*",
+      "method": "ALL",
+      "description": "Test form handler",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "Should be disabled in production or IP-restricted"
+      ]
+    },
+    {
+      "type": "form",
+      "path": "/form-waiting/*",
+      "method": "ALL",
+      "description": "Waiting form handler",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "External access required"
+      ]
+    },
+    {
+      "type": "mcp",
+      "path": "/mcp/*",
+      "method": "ALL",
+      "description": "MCP server endpoint",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "External access for AI integrations",
+        "Rate limit strictly"
+      ]
+    },
+    {
+      "type": "mcp",
+      "path": "/mcp-test/*",
+      "method": "ALL",
+      "description": "Test MCP endpoint",
+      "riskLevel": "high",
+      "firewallNotes": [
+        "Should be disabled in production"
+      ]
+    }
+  ],
+  "system": [
+    {
+      "path": "/healthz",
+      "method": "GET",
+      "description": "Health check",
+      "riskLevel": "low",
+      "requiresAuth": false,
+      "firewallNotes": [
+        "Required for load balancers",
+        "No sensitive data exposed"
+      ]
+    },
+    {
+      "path": "/healthz/readiness",
+      "method": "GET",
+      "description": "Readiness check",
+      "riskLevel": "low",
+      "requiresAuth": false,
+      "firewallNotes": [
+        "Required for Kubernetes",
+        "No sensitive data exposed"
+      ]
+    },
+    {
+      "path": "/metrics",
+      "method": "GET",
+      "description": "Prometheus metrics",
+      "riskLevel": "medium",
+      "requiresAuth": false,
+      "firewallNotes": [
+        "Exposes internal metrics",
+        "Should be IP-restricted or authenticated"
+      ]
+    }
+  ],
+  "publicApi": [
+    {
+      "type": "public-api",
+      "path": "/api/v1/audit",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/credentials",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/credentials/{id}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/credentials/schema/{credentialTypeName}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/credentials/{id}/transfer",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/executions",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/executions/{id}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/executions/{id}/retry",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/tags",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/tags/{id}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows/{id}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows/{id}/{versionId}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows/{id}/activate",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows/{id}/deactivate",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows/{id}/transfer",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/workflows/{id}/tags",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/users",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/users/{id}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/users/{id}/role",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/source-control/pull",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/variables",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/variables/{id}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/projects",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/projects/{projectId}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/projects/{projectId}/users",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    },
+    {
+      "type": "public-api",
+      "path": "/api/v1/projects/{projectId}/users/{userId}",
+      "description": "Public REST API endpoint",
+      "authMethod": "X-N8N-API-KEY header",
+      "requiresAuth": true,
+      "riskLevel": "medium",
+      "firewallNotes": [
+        "Requires API key authentication",
+        "Rate limit per API key"
+      ]
+    }
+  ]
+}
