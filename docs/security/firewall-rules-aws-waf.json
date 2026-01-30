@@ -164,7 +164,8 @@
         "Statement": {
           "RateBasedStatement": {
             "AggregateKeyType": "IP",
-            "Limit": 1000,
+            "Limit": 50,
+            "_comment": "50 requests per 5 min = 10/min, matching Nginx config",
             "ScopeDownStatement": {
               "AndStatement": {
                 "Statements": [
@@ -222,7 +223,8 @@
         "Statement": {
           "RateBasedStatement": {
             "AggregateKeyType": "IP",
-            "Limit": 100,
+            "Limit": 25,
+            "_comment": "25 requests per 5 min = 5/min, matching Nginx config",
             "ScopeDownStatement": {
               "ByteMatchStatement": {
                 "FieldToMatch": {
@@ -471,6 +473,8 @@
   "notes": [
     "This configuration blocks E2E testing endpoints, debug endpoints, and test webhook endpoints",
     "Rate limiting is applied to login, password reset, webhooks, and general API endpoints",
+    "Rate limits are aligned with Nginx config: Login=10/min, Password=5/min, API=100/sec",
+    "AWS WAF rate limits use 5-minute windows; limits are converted accordingly",
     "AWS Managed Rules are included for common attack protection",
     "Customize IP-based rules according to your network requirements",
     "Review and test rules in count mode before blocking"
